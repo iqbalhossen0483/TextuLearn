@@ -33,3 +33,5 @@ celerybeat-schedule
 .DS_Store
 .Trashes
 Thumbs.db
+
+/server/.env
