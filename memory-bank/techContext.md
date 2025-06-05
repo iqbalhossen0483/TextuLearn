@@ -28,7 +28,7 @@
 - **Google ADK Dependency**: The core agent logic is tightly coupled with Google ADK, requiring adherence to its patterns and capabilities.
 - **Pinecone Index Name**: A single Pinecone index (`book-index`) is specified for storing all book embeddings.
 - **API Key Requirements**: Google API Key and Pinecone API Key/Environment are mandatory for the system to function.
-- **Redis Availability**: RQ tasks will fail if the Redis server is not accessible at the configured `REDIS_URL`.
+- **Redis Availability**: Celery tasks will fail if the Redis server is not accessible at the configured `REDIS_URL`.
 
 ## 4. Dependencies
 

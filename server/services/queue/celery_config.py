@@ -19,3 +19,6 @@ def make_celery():
     return celery_app
 
 celery_app = make_celery()
+
+
+# python -m celery -A services.queue.celery_config.celery_app worker --loglevel=info --pool=solo

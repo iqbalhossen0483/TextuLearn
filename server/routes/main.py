@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify
-from services.queue.tasks import proccess_context_data
 
 main_bp = Blueprint('main', __name__)
 
