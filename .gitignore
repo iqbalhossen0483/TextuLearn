@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.pytest_cache/
+htmlcov/
+.ipynb_checkpoints
+.mypy_cache/
+.dmypy.json
+celerybeat-schedule
+.vscode/
+
+# Environment variables
+.env
+.flaskenv
+
+# IDEs and editors
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+
+# OS generated files
+.DS_Store
+.Trashes
+Thumbs.db

@@ -1,0 +1,88 @@
+# Cline's Project Rules and Preferences
+
+This file outlines the established patterns, preferences, and project intelligence for the AI Book Agent Platform. It serves as a living document to guide development and ensure consistency.
+
+---
+
+## 1. General Development Principles
+
+- **Modularity**: Prioritize breaking down complex functionalities into smaller, reusable modules or components.
+- **Readability**: Write clean, well-commented, and easily understandable code.
+- **Testability**: Design components to be easily testable, favoring unit and integration tests.
+- **Scalability**: Consider future growth and ensure solutions can scale with increased load or data.
+- **Security**: Implement security best practices, especially for API endpoints and data handling.
+- **Documentation**: Maintain clear and concise documentation for code, APIs, and system architecture.
+
+---
+
+## 2. Backend (Server) Development Rules
+
+### 2.1. Language & Framework
+
+- **Python**: Adhere to Pythonic principles (PEP 8).
+- **Flask**: Use Flask for building RESTful APIs. Keep routes lean and delegate business logic to services.
+
+### 2.2. Project Structure
+
+- All backend-related code and files will reside within the `server/` directory.
+- Follow the structure outlined in `server/PRD.md` and `memory-bank/systemPatterns.md`:
+  - `server/app.py`: Main Flask application instance.
+  - `server/agents/`: Google ADK agent logic.
+  - `server/services/`: Core business logic (embedding, vector store, retrieval).
+  - `server/routes/`: Flask blueprints for API endpoints.
+  - `server/config/`: Configuration settings.
+  - `server/.env`: Environment variables (not committed to VCS).
+  - `server/requirements.txt`: Python dependencies.
+
+### 2.3. API Design
+
+- **RESTful Principles**: Design APIs to be RESTful, using standard HTTP methods (GET, POST) and clear resource-based URLs.
+- **JSON Payloads**: All request and response bodies will be in JSON format.
+- **Error Handling**: Implement consistent error responses with appropriate HTTP status codes and descriptive messages.
+- **Input Validation**: Validate all incoming API payloads to ensure data integrity and prevent malicious input.
+
+### 2.4. Data Handling
+
+- **Pinecone**: Use Pinecone as the primary vector database. Ensure proper indexing and metadata handling.
+- **LangChain**: Utilize LangChain for interactions with LLMs and embedding models.
+- **Environment Variables**: Manage sensitive information (API keys, credentials) via environment variables loaded from `.env`.
+
+### 2.5. AI Agents (Google ADK)
+
+- Each distinct AI functionality (chat, Q&A, best answer) will be implemented as a separate Google ADK agent.
+- Agents should be designed to be focused on their specific task and interact with services for data retrieval/storage.
+
+---
+
+## 3. Frontend Development Rules (Future Consideration)
+
+### 3.1. General Principles
+
+- **Component-Based**: Favor a component-based architecture for UI development.
+- **State Management**: Implement a clear and predictable state management strategy.
+- **Responsiveness**: Design UIs to be responsive across various devices and screen sizes.
+- **Accessibility**: Ensure the frontend is accessible to users with disabilities.
+
+### 3.2. Technology Stack (Placeholder)
+
+- Specific frontend framework (e.g., React, Vue, Angular) will be decided in a later phase.
+- Build tools (e.g., Webpack, Vite) and package managers (npm, yarn) will be chosen based on the framework.
+
+### 3.3. Interaction with Backend
+
+- Communicate with the backend exclusively via the defined REST API endpoints.
+- Handle asynchronous operations and display loading/error states appropriately.
+
+---
+
+## 4. Tool Usage Patterns
+
+- **`read_file`**: Use to understand existing code, configuration, or documentation.
+- **`write_to_file`**: Use for creating new files or completely overwriting existing ones (e.g., initial setup, major refactoring).
+- **`replace_in_file`**: Preferred for making targeted, incremental changes to existing files. Always ensure SEARCH blocks are exact matches.
+- **`execute_command`**: For system operations, installing dependencies, running tests, or starting development servers. Always explain the command's purpose.
+- **`search_files`**: For locating specific patterns, functions, or text across the codebase.
+- **`list_files`**: To explore directory structures or confirm file existence.
+- **`browser_action`**: For verifying web application functionality, UI rendering, and debugging in a browser environment.
+- **Memory Bank**: Always consult and update the memory bank files (`projectbrief.md`, `productContext.md`, `systemPatterns.md`, `techContext.md`, `activeContext.md`, `progress.md`) to maintain project context and progress.
+- **`.clinerules`**: This file itself will be updated as new project-specific patterns or preferences emerge.
