@@ -124,6 +124,8 @@ The backend provides the following RESTful API endpoints:
 | Purpose        | Tool/Library                  |
 | :------------- | :---------------------------- |
 | API Server     | Flask                         |
+| Task Queue     | Celery                        |
+| Queue Broker   | Redis                         |
 | Embedding      | LangChain (Gemini Embeddings) |
 | Vector Store   | Pinecone                      |
 | Agents         | Google Agent Development Kit  |

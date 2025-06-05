@@ -80,9 +80,23 @@ This file outlines the established patterns, preferences, and project intelligen
 - **`read_file`**: Use to understand existing code, configuration, or documentation.
 - **`write_to_file`**: Use for creating new files or completely overwriting existing ones (e.g., initial setup, major refactoring).
 - **`replace_in_file`**: Preferred for making targeted, incremental changes to existing files. Always ensure SEARCH blocks are exact matches.
-- **`execute_command`**: For system operations, installing dependencies, running tests, or starting development servers. Always explain the command's purpose.
+- \***\*`execute_command`**: For system operations, installing dependencies, running tests, or starting development servers. Always explain the command's purpose.
 - **`search_files`**: For locating specific patterns, functions, or text across the codebase.
 - **`list_files`**: To explore directory structures or confirm file existence.
 - **`browser_action`**: For verifying web application functionality, UI rendering, and debugging in a browser environment.
 - **Memory Bank**: Always consult and update the memory bank files (`projectbrief.md`, `productContext.md`, `systemPatterns.md`, `techContext.md`, `activeContext.md`, `progress.md`) to maintain project context and progress.
 - **`.clinerules`**: This file itself will be updated as new project-specific patterns or preferences emerge.
+
+---
+
+## 5. Project-Specific Intelligence
+
+### 5.1. VS Code / Pylance Configuration
+
+- For Python projects, ensure the VS Code Python extension (Pylance) is configured to use the correct virtual environment interpreter. This resolves "Import could not be resolved" errors.
+  - **Action**: Use `Ctrl+Shift+P` (or `Cmd+Shift+P`) -> "Python: Select Interpreter" and choose the project's `.venv` interpreter.
+
+### 5.2. Redis URL Formatting
+
+- When configuring `REDIS_URL` in `.env` or similar configuration files, always prepend the URL with the `redis://` scheme. This ensures proper interpretation by libraries like Celery/Kombu.
+  - **Example**: `REDIS_URL=redis://your-redis-host:port/db_number`

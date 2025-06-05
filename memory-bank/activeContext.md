@@ -1,21 +1,37 @@
-# Active Context: AI Book Agent Platform (Backend Server)
+# Active Context: AI Book Agent Platform
 
-## 1. Current Work Focus
+## Current Work Focus
 
-The current focus is on establishing the foundational memory bank for the AI Book Agent Platform backend and organizing the initial project structure.
+The primary focus has been on integrating the Celery queue system with Redis into the backend. This involved:
 
-## 2. Recent Changes
+- Adding `celery` to `server/requirements.txt`.
+- Configuring Celery in `server/config/settings.py`.
+- Creating `server/celery_app.py` to initialize the Celery application.
+- Refactoring `server/services/queue_manager.py` to define and use Celery tasks.
+- Updating memory bank documentation to reflect the change from RQ to Celery.
 
-- **`PRD.md` Added**: The `PRD.md` file was initially added to the project root.
-- **Memory Bank Initialized**: The core memory bank files (`projectbrief.md`, `productContext.md`, `systemPatterns.md`, `techContext.md`, `activeContext.md`, `progress.md`) have been created and populated with information extracted from `PRD.md`.
-- **`PRD.md` Relocated**: The `PRD.md` file has been moved from the project root to the `server/` directory as instructed.
+## Recent Changes
 
-## 3. Next Steps
+- `server/requirements.txt`: Updated to add `celery`.
+- `server/config/settings.py`: Updated to include Celery broker and result backend URLs.
+- `server/celery_app.py`: Created to initialize the Celery application.
+- `server/services/queue_manager.py`: Modified to define a sample Celery task.
+- `server/app.py`: Will be modified to integrate with Celery (future step).
+- `server/routes/main.py`: Will be updated to use Celery tasks (future step).
+- Memory bank files (`techContext.md`, `activeContext.md`, `progress.md`) updated to reflect Celery integration.
 
-The memory bank has been fully updated and the initial file organization is complete. The next steps will involve beginning the implementation of the backend server as outlined in the `PRD.md` and the memory bank.
+## Next Steps
 
-## 4. Active Decisions and Considerations
+With the integration of Celery, the next steps will involve:
 
-- **Backend-Only Scope**: The project is strictly backend-focused for now. Frontend considerations will be deferred.
-- **File Organization**: All backend server files will be kept inside the `server/` folder.
-- **Memory Bank as Source of Truth**: The memory bank is now fully initialized and will serve as the primary reference for all future development tasks.
+- Modifying `server/app.py` to integrate with the Celery queue system.
+- Updating `server/routes/main.py` to use Celery tasks.
+- Verifying the end-to-end functionality by running the Flask application and a Celery worker.
+- Proceeding with the implementation of other core backend functionalities, including Google ADK agents, services, and API routes.
+- Integrating with Pinecone and Google Gemini.
+
+## Active Decisions and Considerations
+
+- Ensuring consistent environment setup across development machines.
+- Confirming the stability and performance of the Redis connection for asynchronous tasks with Celery.
+- Designing how Celery tasks will be further utilized by other services and agents for specific AI tasks.

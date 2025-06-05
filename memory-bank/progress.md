@@ -1,28 +1,30 @@
-# Progress: AI Book Agent Platform (Backend Server)
+# Progress: AI Book Agent Platform
 
-## 1. What Works
+## What Works
 
-- **PRD Available**: The `PRD.md` document has been successfully added to the project and relocated to `server/PRD.md`, outlining the core requirements and functionalities of the backend server.
-- **Memory Bank Initialized**: The foundational memory bank files (`projectbrief.md`, `productContext.md`, `systemPatterns.md`, `techContext.md`, `activeContext.md`, `progress.md`) have been created and populated, providing a comprehensive overview of the project's context, architecture, and technical stack.
-- **Initial File Organization**: The `PRD.md` file has been successfully moved into the `server/` directory, establishing the initial project structure as requested.
+- Initial project structure is in place.
+- Python virtual environment setup is confirmed.
+- The `REDIS_URL` format in `server/.env` has been corrected.
+- `celery` has been added to `server/requirements.txt`.
+- Celery configuration has been added to `server/config/settings.py`.
+- `server/celery_app.py` has been created to initialize the Celery application.
+- A sample Celery task has been defined in `server/services/queue_manager.py`.
+- Memory bank documentation (`techContext.md`, `activeContext.md`, `progress.md`) has been updated to reflect Celery integration.
+- Import paths have been corrected to avoid `ModuleNotFoundError` when running from `server/run.py`.
 
-## 2. What's Left to Build
+## What's Left to Build
 
-The primary development tasks for the backend server, as outlined in the `PRD.md`, are yet to be implemented. These include:
+- Modifying `server/app.py` to integrate with the Celery queue system.
+- Updating `server/routes/main.py` to use Celery tasks.
+- Full testing of Celery task processing with workers.
+- Implement core backend functionalities (agents, services, other routes).
+- Integrate with Pinecone and Google Gemini.
+- Develop frontend (future phase).
 
-- **Core Flask Application**: Setting up the main Flask application (`app.py`).
-- **API Routes**: Implementing all specified API endpoints (`/upload-book`, `/chat`, `/short-qa`, `/long-qa`, `/best-answer`, `/status`).
-- **Service Layer**: Developing the `embedder.py`, `vector_store.py`, and `retriever.py` services.
-- **AI Agents**: Creating the Google ADK agents (`chat_agent.py`, `short_qa_agent.py`, `long_qa_agent.py`, `best_answer_agent.py`).
-- **Configuration**: Setting up `config/settings.py` and handling environment variables.
-- **Dependency Management**: Creating `requirements.txt`.
-- **Error Handling & Validation**: Implementing robust error handling, logging, and payload validation.
-- **Testing**: Developing unit tests for endpoints and core functionalities.
+## Current Status
 
-## 3. Current Status
+The backend environment is now set up with Celery and Redis as the queue system. The core task queue setup is in place, and the system is ready for further development and testing of core AI functionalities.
 
-The project is in its very early stages. The initial setup, including comprehensive documentation and project structuring, is now complete. No functional code has been written yet.
+## Known Issues
 
-## 4. Known Issues
-
-- None at this stage, as functional development has not yet begun.
+- None at this moment. The next step is to run the Flask app and Celery worker to verify end-to-end task processing.
