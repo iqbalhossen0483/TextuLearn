@@ -2,18 +2,21 @@
 
 ## 1. Technologies Used
 
-| Purpose        | Tool/Library                  | Version (Target) | Notes                                                             |
-| :------------- | :---------------------------- | :--------------- | :---------------------------------------------------------------- |
-| API Server     | Flask                         | Latest Stable    | Lightweight web framework for REST API.                           |
-| Task Queue     | Celery                        | Latest Stable    | Asynchronous task queue for background processing.                |
-| Queue Broker   | Redis (via Celery)            | Latest Stable    | Message broker and result backend for Celery.                     |
-| Embedding      | LangChain (Gemini Embeddings) | Latest Stable    | Facilitates interaction with Google Gemini for text embeddings.   |
-| Vector Store   | Pinecone                      | Latest Stable    | Cloud-native vector database for efficient similarity search.     |
-| Agents         | Google Agent Development Kit  | Latest Stable    | Framework for building and orchestrating AI agents.               |
-| LLM            | Google Gemini Pro             | Latest Stable    | Large Language Model for all generative AI tasks.                 |
-| Storage Format | JSON + Pinecone Metadata      | N/A              | Data payload for API requests and metadata stored in Pinecone.    |
-| Deployment     | Gunicorn + Docker (optional)  | Latest Stable    | Gunicorn for production WSGI server, Docker for containerization. |
-| Environment    | Python                        | 3.9+             | Primary programming language.                                     |
+| Purpose            | Tool/Library                  | Version (Target) | Notes                                                                 |
+| :----------------- | :---------------------------- | :--------------- | :-------------------------------------------------------------------- |
+| API Server         | Flask                         | Latest Stable    | Lightweight web framework for REST API.                               |
+| Task Queue         | Celery                        | Latest Stable    | Asynchronous task queue for background processing.                    |
+| Queue Broker       | Redis (via Celery)            | Latest Stable    | Message broker and result backend for Celery.                         |
+| Embedding          | LangChain (Gemini Embeddings) | Latest Stable    | Facilitates interaction with Google Gemini for text embeddings.       |
+| Vector Store       | Pinecone                      | Latest Stable    | Cloud-native vector database for efficient similarity search.         |
+| Agents             | Google Agent Development Kit  | Latest Stable    | Framework for building and orchestrating AI agents.                   |
+| LLM                | Google Gemini Pro             | Latest Stable    | Large Language Model for all generative AI tasks.                     |
+| Storage Format     | JSON + Pinecone Metadata      | N/A              | Data payload for API requests and metadata stored in Pinecone.        |
+| Deployment         | Gunicorn + Docker (optional)  | Latest Stable    | Gunicorn for production WSGI server, Docker for containerization.     |
+| Environment        | Python                        | 3.9+             | Primary programming language.                                         |
+| Frontend Framework | Next.js                       | Latest Stable    | React framework for server-side rendering and static site generation. |
+| CSS Framework      | Tailwind CSS                  | Latest Stable    | Utility-first CSS framework.                                          |
+| Frontend Language  | JavaScript (React)            | ES6+             | Primary language for frontend development.                            |
 
 ## 2. Development Setup
 

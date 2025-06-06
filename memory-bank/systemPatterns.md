@@ -2,31 +2,35 @@
 
 ## 1. System Architecture Overview
 
-The AI Book Agent Platform backend follows a modular, layered architecture designed for clarity, maintainability, and scalability. It now includes a task queue system for asynchronous processing.
+The AI Book Agent Platform follows a modular, layered architecture designed for clarity, maintainability, and scalability. It comprises a Next.js frontend and a Python/Flask backend with a Celery task queue.
 
 ```mermaid
 graph TD
-    A[Frontend] --> B(Flask API Gateway);
-    B --> C{Request Router};
-    C --> D[Services Layer];
-    D --> E[Vector Store (Pinecone)];
-    D --> F[AI Agents (Google ADK)];
-    F --> G[LLM (Google Gemini Pro)];
-    B --> H[Celery Tasks];
-    H --> I[Redis (Broker/Backend)];
-
-    subgraph Backend
-        B
-        C
-        D
-        E
-        F
-        G
-        H
-        I
+    subgraph User Facing
+        A[Next.js Frontend]
     end
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
+    subgraph Backend Infrastructure
+        B(Flask API Gateway)
+        C{Request Router}
+        D[Services Layer]
+        E[Vector Store (Pinecone)]
+        F[AI Agents (Google ADK)]
+        G[LLM (Google Gemini Pro)]
+        H[Celery Tasks]
+        I[Redis (Broker/Backend)]
+    end
+
+    A --> B;
+    B --> C;
+    C --> D;
+    D --> E;
+    D --> F;
+    F --> G;
+    B --> H;
+    H --> I;
+
+    style A fill:#ccf,stroke:#333,stroke-width:2px
     style B fill:#bbf,stroke:#333,stroke-width:2px
     style C fill:#bbf,stroke:#333,stroke-width:2px
     style D fill:#bbf,stroke:#333,stroke-width:2px
@@ -46,7 +50,9 @@ graph TD
 - **Google Gemini Pro as LLM**: Gemini Pro is the chosen large language model for all AI agent interactions, providing advanced natural language understanding and generation capabilities.
 - **Celery for Asynchronous Tasks**: Celery is integrated to handle long-running or background tasks asynchronously, improving API responsiveness.
 - **Redis as Celery Broker/Backend**: Redis is used as the message broker and result backend for Celery, providing efficient message queuing and task state storage.
-- **Modular Codebase**: The project is structured into `agents/`, `services/`, ``routes/`, and `config/` directories to promote separation of concerns and improve maintainability.
+- **Modular Codebase**: The project is structured into `frontend/` and `server/` directories, with further subdivisions like `server/agents/`, `server/services/`, `server/routes/`, and `server/config/` to promote separation of concerns.
+- **Next.js for Frontend**: Next.js is chosen for its capabilities in server-side rendering, static site generation, and overall developer experience for React-based applications.
+- **Tailwind CSS for Styling**: Tailwind CSS is used for its utility-first approach, enabling rapid UI development and consistent styling.
 
 ## 3. Design Patterns in Use
 
@@ -57,8 +63,8 @@ graph TD
 
 ## 4. Component Relationships
 
-- **Frontend <--> Flask API**: The frontend communicates exclusively with the Flask API endpoints for all backend operations.
-- **Flask API <--> Services**: Flask routes delegate requests to the appropriate functions within the `services/` layer.
+- **Next.js Frontend <--> Flask API**: The Next.js frontend communicates exclusively with the Flask API endpoints for all backend operations.
+- **Flask API <--> Services**: Flask routes delegate requests to the appropriate functions within the `server/services/` layer.
 - **Services <--> Pinecone**: The `vector_store.py` service interacts directly with Pinecone for storing and retrieving vector embeddings.
 - **Services <--> AI Agents**: The `retriever.py` service fetches relevant context, which is then passed to the AI agents for processing.
 - **AI Agents <--> LLM**: AI agents utilize the Google Gemini Pro LLM (via LangChain) to generate responses based on retrieved context and user queries.

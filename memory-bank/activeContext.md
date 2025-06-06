@@ -2,51 +2,66 @@
 
 ## Current Work Focus
 
-The focus has been on establishing the data ingestion pipeline using Celery for asynchronous processing and structuring the API routes according to standard Flask practices. This includes:
+The primary focus has shifted to include frontend development alongside ongoing backend refinements.
 
-- Modularizing API routes by creating separate Blueprints.
-- Defining Celery tasks to process individual book chunks for embedding and storage.
-- Ensuring the Flask application correctly registers all Blueprints.
+**Backend:**
+
+- Focus remains on ensuring the stability and robustness of the data ingestion pipeline (Celery, EmbeddingService, VectorStoreService).
+- Verifying API route functionality and Celery worker operations.
+
+**Frontend:**
+
+- Initial project setup with Next.js and Tailwind CSS.
+- Definition of a global color palette.
 
 ## Recent Changes
 
+**Frontend:**
+
+- **Initialization**: The `frontend/` directory was initialized as a Next.js project.
+- **Styling**: Tailwind CSS was integrated.
+- **Color Palette**: A color palette was defined in `frontend/src/app/globals.css`:
+  ```css
+  @theme inline {
+    --color-primary: #1dc9b4;
+    --color-primary-dark: #1a1a1a;
+    --color-secondary: #e6faf8;
+    --color-divider: #b0bec5;
+    --color-secondary-text: #b0bec5;
+    --color-highligh-blue: #80d8ff;
+  }
+  ```
+
+**Backend (No new changes in this update, summarizing previous state):**
+
 - **Route Modularization**:
-  - `server/routes/train_routes.py`: Created this new file to house the training-related API endpoints.
-    - Defined a new Blueprint `train_bp` with `url_prefix='/api/train'`.
-    - The `/api/train/` POST endpoint (previously in `main.py`) is now located here as `@train_bp.route('/', methods=['POST'])`.
-  - `server/routes/main.py`:
-    - The `/api/train` route and its specific dependencies (like `process_single_chunk_task` import and `request` object) were removed.
-  - `server/app.py`:
-    - Imported `train_bp` from `server.routes.train_routes`.
-    - Registered `train_bp` with the Flask application.
-    - Adjusted import path for `main_bp` for consistency (`server.routes.main`).
+  - `server/routes/train_routes.py`: Houses the `/api/train/` POST endpoint.
+  - `server/app.py`: Registers `train_bp` and `main_bp`.
 - `server/services/queue/tasks.py`:
-  - **Completed `process_single_chunk_task`**: Updated the task to use `EmbeddingService` and `VectorStoreService` instances. Import paths within this task are set to `from services...` and `from config...`.
-  - (Previous change, still relevant) Defined `process_single_chunk_task` for handling individual chunks.
-  - (Previous change, still relevant) Renamed and updated `process_context_data` task.
-- **Python Packaging for Celery**:
-  - Created `server/services/__init__.py` and `server/services/queue/__init__.py` to ensure `services` and `services.queue` are treated as Python packages. This is crucial for Celery's task discovery mechanism.
+  - `process_single_chunk_task` uses `EmbeddingService` and `VectorStoreService`.
+- **Python Packaging for Celery**: `__init__.py` files in `services` and `services/queue`.
 - **Service Implementation**:
-  - `server/services/embedding_service.py`: **Implemented** `EmbeddingService` using `langchain_google_genai.GoogleGenerativeAIEmbeddings` (model `models/embedding-001`).
-  - `server/services/vector_store_service.py`: **User-Updated and Fixed** `VectorStoreService`. The user resolved the `TypeError` during Pinecone initialization. Key changes include:
-    - Pinecone client initialized with `Pinecone(api_key=Config.PINECONE_API_KEY)` (environment parameter removed).
-    - Index existence check changed to `if self.index_name not in self.pinecone.list_indexes().names():`, correctly calling `.names()` as a method. This resolved the "argument of type 'method' is not iterable" error.
-    - The explicit `time.sleep` loop for waiting for index readiness after creation was removed by the user.
-- `memory-bank/techContext.md`: (Previous change, still relevant) Corrected "RQ tasks" to "Celery tasks".
+  - `EmbeddingService` implemented.
+  - `VectorStoreService` fixed by the user.
+- `memory-bank/techContext.md`: Updated to include Next.js and Tailwind CSS.
+- `memory-bank/projectbrief.md`: Updated to reflect frontend development commencement.
+- `memory-bank/systemPatterns.md`: Updated architecture diagram and component relationships to include frontend.
 
 ## Next Steps
 
-With `EmbeddingService` implemented and `VectorStoreService` fixed by the user, `process_single_chunk_task` calling them, and Python packaging for Celery task discovery addressed, the core data ingestion pipeline services should be functional. The next critical steps are:
+**Frontend:**
 
-- **Celery Worker Verification**:
-  - The user has indicated the issue is solved, implying the Celery worker now processes tasks correctly without the Pinecone-related `TypeError`.
-- **Configuration**:
-  - Ensure API keys and other necessary configurations for Gemini and Pinecone are correctly loaded via `server/config/settings.py` and `.env`.
+- Develop basic page structure and layout components.
+- Implement UI elements for interacting with the backend (e.g., file upload, chat interface).
+
+**Backend:**
+
+- **Celery Worker Verification**: Continue to monitor and ensure Celery workers process tasks correctly.
+- **Configuration**: Double-check API keys and configurations in `server/config/settings.py` and `.env`.
 - **Testing**:
   - Thoroughly test the `/api/train/` endpoint.
-  - Verify that Celery tasks are created, processed, and interact correctly with (mocked or real) embedding and vector store services.
-  - Ensure all registered Blueprints and routes are functioning as expected.
-- **Documentation**: Continue updating memory bank files as development progresses.
+  - Verify Celery task processing.
+- **Documentation**: Continue updating memory bank files.
 
 ## Active Decisions and Considerations
 

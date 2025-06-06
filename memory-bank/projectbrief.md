@@ -24,7 +24,8 @@ Key functionalities include:
   - Health checks.
 - Orchestrating AI agents built with Google ADK.
 
-The backend server code and related files will be organized within a dedicated "server" directory. Frontend development will be addressed in a later phase.
+The backend server code and related files will be organized within a dedicated "server" directory.
+Frontend development has commenced using Next.js and Tailwind CSS, with initial setup and color palette definition completed. The frontend code resides in the "frontend" directory.
 
 ## 4. High-Level Goals
 
