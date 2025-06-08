@@ -38,6 +38,24 @@
     --color-highligh-blue: #80d8ff;
   }
   ```
+- **NavBar Component**: Created `frontend/src/components/common/NavBar.jsx`.
+- **Layout Integration**: `NavBar` added to `frontend/src/app/layout.js`.
+- **Button Component**: Created `frontend/src/components/libs/Button.jsx` with "contain" and "outline" variants.
+- **NavBar Refactor**: Updated `NavBar` to use the new `Button` component.
+- **NavBar Active Link**: Implemented active link styling in `NavBar` using `usePathname`.
+- **Banner Component**: Created `frontend/src/components/home/Banner.jsx`.
+- **Home Page Update**: Integrated `Banner` component into `frontend/src/app/page.jsx`.
+- **KeyFeatures Component**: Created `frontend/src/components/home/KeyFeatures.jsx`.
+- **Home Page Update**: Integrated `KeyFeatures` component into `frontend/src/app/page.jsx`.
+- **KeyFeatures Styling**: Added decorative background shape to `KeyFeatures` component.
+- **WhyChoose Component**: Created `frontend/src/components/home/WhyChoose.jsx` with a two-column layout, mascot image, and feature list.
+- **Home Page Update**: Integrated `WhyChoose` component into `frontend/src/app/page.jsx` after `KeyFeatures`.
+- **Faq Component**: Created `frontend/src/components/home/Faq.jsx` and subsequently updated it to an accordion style with animation, background, and react-icons.
+- **Home Page Update**: Integrated `Faq` component into `frontend/src/app/page.jsx` after `WhyChoose`.
+- **CallToActionBanner Component**: Created `frontend/src/components/home/CallToActionBanner.jsx`.
+- **Home Page Update**: Integrated `CallToActionBanner` component into `frontend/src/app/page.jsx` after `Faq`.
+- **Footer Component**: Created `frontend/src/components/common/Footer.jsx`.
+- **Layout Update**: Integrated `Footer` component into `frontend/src/app/layout.js` and added flex styling for sticky footer.
 
 **Memory Bank:**
 

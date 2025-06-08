@@ -2,9 +2,19 @@
 
 @theme inline {
   --color-primary: #1dc9b4;
-  --color-primary-dark: #1a1a1a;
+  --color-primary-dark: #12a694;
   --color-secondary: #e6faf8;
-  --color-divider: #b0bec5;
+  --color-divider: #198a7d84;
   --color-secondary-text: #b0bec5;
   --color-highligh-blue: #80d8ff;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px #1dc9b5ab;
+  text-align: center;
+}
+
+button {
+  @apply cursor-pointer disabled:cursor-not-allowed;
 }

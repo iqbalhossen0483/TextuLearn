@@ -13,11 +13,39 @@ The primary focus has shifted to include frontend development alongside ongoing 
 
 - Initial project setup with Next.js and Tailwind CSS.
 - Definition of a global color palette.
+- Development of `NavBar` component.
+- Development of reusable `Button` component.
+- Added active link styling to `NavBar` component.
+- Development of `Banner` component for the home page.
+- Development of `KeyFeatures` component for the home page, including decorative background shape.
+- Development of `WhyChoose` component for the home page.
+- Development of `Faq` component for the home page (accordion style, with animation, background, and react-icons).
+- Development of `CallToActionBanner` component for the home page.
+- Development of `Footer` component.
 
 ## Recent Changes
 
 **Frontend:**
 
+- **Footer Component**: Created `frontend/src/components/common/Footer.jsx` with logo, description, useful links, features, social media links, and copyright.
+- **Layout Update**: Added `Footer` component to `frontend/src/app/layout.js` to display on all pages. Added flex styling to ensure footer sticks to the bottom.
+- **CallToActionBanner Component**: Created `frontend/src/components/home/CallToActionBanner.jsx` with the specified content, styling, and mascot image.
+- **Home Page Update**: Added `CallToActionBanner` component to `frontend/src/app/page.jsx` after the `Faq` component.
+- **Faq Component Update**: Updated `frontend/src/components/home/Faq.jsx` to use `react-icons` for the chevron, added animation for expand/collapse, and a background color.
+- **Faq Component**: Created `frontend/src/components/home/Faq.jsx` with the provided FAQ content.
+- **Home Page Update**: Added `Faq` component to `frontend/src/app/page.jsx` after the `WhyChoose` component.
+- **WhyChoose Component**: Created `frontend/src/components/home/WhyChoose.jsx` with a two-column layout, mascot image, and feature list for the "Why choose TextuLearn?" section.
+- **Home Page Update**: Added `WhyChoose` component to `frontend/src/app/page.jsx` after the `KeyFeatures` component.
+- **KeyFeatures Styling**: Added a decorative background shape to the bottom-left of the `KeyFeatures` component.
+- **KeyFeatures Component**: Created `frontend/src/components/home/KeyFeatures.jsx` with the four agreed-upon features.
+- **Home Page Update**: Added `KeyFeatures` component to `frontend/src/app/page.jsx` after the `Banner`.
+- **Banner Component**: Created `frontend/src/components/home/Banner.jsx` with specified text, image, and button.
+- **Home Page Update**: Added `Banner` component to `frontend/src/app/page.jsx`.
+- **NavBar Active Link**: Updated `frontend/src/components/common/NavBar.jsx` to highlight the active navigation link using `usePathname` hook and `text-primary` color.
+- **Button Component**: Created `frontend/src/components/libs/Button.jsx` with "contain" and "outline" variants.
+- **NavBar Update**: Updated `frontend/src/components/common/NavBar.jsx` to use the new `Button` component for Login and Register buttons.
+- **NavBar Component**: Created `frontend/src/components/common/NavBar.jsx` with logo, menu items (Home, Chatbot, Books), and Login/Register buttons.
+- **Layout Update**: Integrated `NavBar` into `frontend/src/app/layout.js` to display on all pages.
 - **Initialization**: The `frontend/` directory was initialized as a Next.js project.
 - **Styling**: Tailwind CSS was integrated.
 - **Color Palette**: A color palette was defined in `frontend/src/app/globals.css`:
