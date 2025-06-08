@@ -1,10 +1,12 @@
-"use client"; // Required for usePathname
+"use client";
 import Button from "@/components/libs/Button";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const NavBar = () => {
+  const [sticky, setSticky] = useState(false);
   const pathname = usePathname();
   const menuItems = [
     { name: "Home", path: "/" },
@@ -12,8 +14,30 @@ const NavBar = () => {
     { name: "Books", path: "/books" },
   ];
 
+  useEffect(() => {
+    const handleSticky = () => {
+      if (window.scrollY > 100) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
+    };
+
+    document.addEventListener("scroll", handleSticky);
+
+    return () => {
+      document.removeEventListener("scroll", handleSticky);
+    };
+  }, []);
+
   return (
-    <nav className='bg-white'>
+    <nav
+      className={`${
+        sticky
+          ? "bg-secondary container mx-auto rounded-2xl shadow top-2"
+          : "bg-white"
+      } sticky z-80`}
+    >
       <div className='container mx-auto px-6 py-1 flex justify-between items-center'>
         {/* Logo */}
         <Link href='/' className='flex items-center'>
