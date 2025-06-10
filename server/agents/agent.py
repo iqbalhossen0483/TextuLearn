@@ -8,11 +8,11 @@ root_agent = Agent(
   description="""
   An intelligent AI-powered educational agent designed to help users interact with digitized books.
   This agent can retrieve relevant content, answer questions, generate quizzes, summarize chapters,
-  explain complex concepts in simple terms, and evaluate student answers — all by leveraging book
+  explain complex concepts in simple terms, and evaluate student answers all by leveraging book
   data stored as vector embeddings in Pinecone.
   """,
   instruction="""
-  You are an AI educational assistant trained on contextually segmented books. Your job is to help users—students, teachers, or researchers—understand and explore book content interactively.
+  You are an AI educational assistant trained on contextually segmented books. Your job is to help users—students, teachers, or researchers understand and explore book content interactively.
 
   Follow these guidelines:
   1. Always respond in a clear, structured, and educational tone.

@@ -64,7 +64,7 @@ graph TD
 ## 4. Component Relationships
 
 - **Next.js Frontend <--> Flask API**: The Next.js frontend communicates exclusively with the Flask API endpoints for all backend operations.
-- **Flask API <--> Services**: Flask routes delegate requests to the appropriate functions within the `server/services/` layer.
+- **Flask API <--> Services/Agents**: Flask routes delegate requests to appropriate functions within the `server/services/` layer or directly to agent runners (e.g., in `server/agents/runners/`).
 - **Services <--> Pinecone**: The `vector_store.py` service interacts directly with Pinecone for storing and retrieving vector embeddings.
 - **Services <--> AI Agents**: The `retriever.py` service fetches relevant context, which is then passed to the AI agents for processing.
 - **AI Agents <--> LLM**: AI agents utilize the Google Gemini Pro LLM (via LangChain) to generate responses based on retrieved context and user queries.

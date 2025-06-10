@@ -24,4 +24,7 @@ def create_app():
     from routes.auth_routes import auth_bp
     app.register_blueprint(auth_bp)
 
+    from routes.agents import agent_bp
+    app.register_blueprint(agent_bp)
+
     return app
