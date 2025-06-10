@@ -25,6 +25,7 @@
 
 **Frontend:**
 
+- **Responsiveness**: The Home page (`frontend/src/app/page.jsx`) and Chatbot page (`frontend/src/app/chatbot/page.jsx`), along with their constituent components, have been made fully responsive to ensure optimal viewing and interaction across various screen sizes and devices.
 - **Chatbot Message Input (Updated)**:
   - Reworked `frontend/src/components/chatbot/MessageInput.jsx` to feature a new design:
     - Input field styled with a white background, full rounding, and shadow.
@@ -73,6 +74,12 @@
 - **Layout Update**: Integrated `Footer` component into `frontend/src/app/layout.js` and added flex styling for sticky footer.
 - **Register Page**: Created `frontend/src/app/register/page.jsx` and `frontend/src/components/auth/RegisterForm.jsx` for user registration.
 - **Login Page**: Created `frontend/src/app/login/page.jsx` and `frontend/src/components/auth/LoginForm.jsx` for user authentication.
+- **Books Page**:
+  - Created `frontend/src/app/books/page.jsx` as the main page for listing books.
+  - Created `frontend/src/components/books/BookSearch.jsx` for the search input and button.
+  - Created `frontend/src/components/books/BookList.jsx` to display a grid of book cards (using placeholder data).
+  - Created `frontend/src/components/books/BookCard.jsx` to render individual book thumbnails and titles.
+  - Confirmed "Books" link in `NavBar.jsx` is functional.
 
 **Memory Bank:**
 

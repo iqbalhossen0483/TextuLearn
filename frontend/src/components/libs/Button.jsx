@@ -8,7 +8,7 @@ const Button = ({
   ...props
 }) => {
   const baseStyles =
-    "px-4 py-2 rounded-md transition-colors duration-200 font-medium flex items-center gap-1 justify-center";
+    "px-4 py-2 rounded-md transition-colors duration-200 font-medium flex items-center gap-1 justify-center w-fit";
 
   const variantStyles = {
     contain: "bg-primary text-white hover:bg-primary-dark",

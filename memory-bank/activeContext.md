@@ -22,11 +22,23 @@ The primary focus has shifted to include frontend development alongside ongoing 
 - Development of `Faq` component for the home page (accordion style, with animation, background, and react-icons).
 - Development of `CallToActionBanner` component for the home page.
 - Development of `Footer` component.
+- **Books Page**:
+  - Created `frontend/src/app/books/page.jsx` for the main books page.
+  - Created `frontend/src/components/books/BookSearch.jsx` for the search functionality.
+  - Created `frontend/src/components/books/BookList.jsx` to display a list of books.
+  - Created `frontend/src/components/books/BookCard.jsx` to display individual book information.
 
 ## Recent Changes
 
 **Frontend:**
 
+- **Books Page Implementation**:
+  - Created the main page file `frontend/src/app/books/page.jsx`.
+  - Implemented `frontend/src/components/books/BookSearch.jsx` with a search input and icon button.
+  - Implemented `frontend/src/components/books/BookList.jsx` to display a grid of book cards (using placeholder data).
+  - Implemented `frontend/src/components/books/BookCard.jsx` to render individual book thumbnails and titles.
+  - Verified that the "Books" navigation link in `NavBar.jsx` correctly points to `/books`.
+- **Responsiveness**: The Home page and Chatbot page, along with their respective components, have been made fully responsive across various screen sizes.
 - **Chatbot Message Input Update**:
   - Modified `frontend/src/components/chatbot/MessageInput.jsx` to match the provided image:
     - Removed existing buttons from the left.
