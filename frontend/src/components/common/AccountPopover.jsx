@@ -21,16 +21,16 @@ const AccountPopover = ({ user, onClose }) => {
       ),
     },
     {
-      name: "Join FB group",
-      path: "https://www.facebook.com", // Full URL
+      name: "Join group",
+      path: process.env.NEXT_PUBLIC_FB_GROUP,
       icon: (
         <FaFacebook className='mr-2 size-4 text-blue-700' aria-hidden='true' />
       ),
       external: true,
     },
     {
-      name: "Follow FB page",
-      path: "https://www.facebook.com", // Full URL
+      name: "Follow page",
+      path: process.env.NEXT_PUBLIC_FB_PAGE,
       icon: (
         <FaFacebook className='mr-2 size-4 text-blue-700' aria-hidden='true' />
       ),
