@@ -15,6 +15,7 @@ Deprecated==1.2.18
 docstring_parser==0.16
 fastapi==0.115.12
 Flask==3.1.0
+Flask-CORS==4.0.1 
 google-adk==0.3.0
 google-ai-generativelanguage==0.6.15
 google-api-core==2.25.0rc0
@@ -71,6 +72,8 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
 python-multipart==0.0.20
 PyYAML==6.0.2
+pymongo==4.7.3
+PyJWT==2.8.0
 reportlab==4.4.0
 requests==2.32.3
 rsa==4.9.1

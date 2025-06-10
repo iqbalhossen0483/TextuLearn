@@ -1,5 +1,6 @@
 import PageShell from "@/components/layout/PageShell";
 import "./globals.css";
+import { Providers } from "./providers";
 
 export const metadata = {
   title: "TextuLearn",
@@ -10,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body className='flex flex-col min-h-screen'>
-        <PageShell>{children}</PageShell>
+        <Providers>
+          <PageShell>{children}</PageShell>
+        </Providers>
       </body>
     </html>
   );

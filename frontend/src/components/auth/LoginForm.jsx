@@ -1,36 +1,33 @@
 "use client";
 
 import Button from "@/components/libs/Button";
+import { useLoginMutation } from "@/hooks/useAuthMutations";
 import { useState } from "react";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+
+  const {
+    mutate: loginUser,
+    error: mutationError,
+    isPending,
+  } = useLoginMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (!email || !password) {
-      setError("Email and password are required.");
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+      loginUser({ email, password });
       return;
     }
 
-    // TODO: Implement actual login logic (e.g., API call)
-    console.log("Login attempt with:", { email, password });
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    // alert('Login functionality to be implemented.');
-    // For now, let's assume login is successful for demonstration
-    // router.push('/'); // Redirect to home or dashboard after login
+    loginUser({ email, password });
   };
 
   return (
@@ -79,8 +76,10 @@ const LoginForm = () => {
             </div>
           </div>
 
-          {error && (
-            <div className='text-red-500 text-sm text-center'>{error}</div>
+          {mutationError && (
+            <div className='text-red-500 text-sm text-center'>
+              {mutationError.message || "Login failed. Please try again."}
+            </div>
           )}
 
           <div className='flex items-center justify-between'>
@@ -110,8 +109,13 @@ const LoginForm = () => {
           </div>
 
           <div>
-            <Button type='submit' variant='contain' className='w-full'>
-              Sign in
+            <Button
+              type='submit'
+              variant='contain'
+              className='w-full'
+              disabled={isPending}
+            >
+              {isPending ? "Signing in..." : "Sign in"}
             </Button>
           </div>
         </form>

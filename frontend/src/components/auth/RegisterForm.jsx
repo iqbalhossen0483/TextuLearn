@@ -1,51 +1,60 @@
 "use client";
 
 import Button from "@/components/libs/Button";
+import { useRegisterMutation } from "@/hooks/useAuthMutations";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const RegisterForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [formError, setFormError] = useState("");
+
+  const registerMutation = useRegisterMutation();
+
+  useEffect(() => {
+    if (registerMutation.isSuccess) {
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    }
+  }, [registerMutation.isSuccess]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setFormError("");
+    registerMutation.reset();
 
     if (!name || !email || !password || !confirmPassword) {
-      setError("All fields are required.");
+      setFormError("All fields are required.");
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+      setFormError("Please enter a valid email address.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setFormError("Passwords do not match.");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
+      setFormError("Password must be at least 6 characters long.");
       return;
     }
 
-    // TODO: Implement actual registration logic (e.g., API call)
-    console.log("Registration attempt with:", { name, email, password });
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setSuccess("Registration successful! Please login.");
-    // alert('Registration functionality to be implemented.');
-    // For now, let's assume registration is successful
-    // router.push('/login'); // Redirect to login page after registration
+    registerMutation.mutate({
+      name,
+      email,
+      password,
+      confirm_password: confirmPassword,
+    });
   };
 
   return (
@@ -129,19 +138,36 @@ const RegisterForm = () => {
             </div>
           </div>
 
-          {error && (
-            <div className='text-red-500 text-sm text-center py-2'>{error}</div>
+          {formError && (
+            <div className='text-red-500 text-sm text-center py-2'>
+              {formError}
+            </div>
           )}
 
-          {success && (
+          {registerMutation.isError && (
+            <div className='text-red-500 text-sm text-center py-2'>
+              {registerMutation.error?.message ||
+                "Registration failed. Please try again."}
+            </div>
+          )}
+
+          {registerMutation.isSuccess && (
             <div className='text-green-500 text-sm text-center py-2'>
-              {success}
+              {registerMutation.data?.message ||
+                "Registration successful! You are now logged in."}
             </div>
           )}
 
           <div>
-            <Button type='submit' variant='contain' className='w-full'>
-              Create account
+            <Button
+              type='submit'
+              variant='contain'
+              className='w-full'
+              disabled={registerMutation.isPending}
+            >
+              {registerMutation.isPending
+                ? "Creating account..."
+                : "Create account"}
             </Button>
           </div>
         </form>

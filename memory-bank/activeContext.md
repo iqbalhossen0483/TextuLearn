@@ -2,131 +2,81 @@
 
 ## Current Work Focus
 
-The primary focus has shifted to include frontend development alongside ongoing backend refinements.
-
 **Backend:**
 
-- Focus remains on ensuring the stability and robustness of the data ingestion pipeline (Celery, EmbeddingService, VectorStoreService).
+- **Production-Level Authentication**: User data returned from `/register` and `/login` routes is now curated to exclude sensitive information like hashed passwords.
+- Ensuring MongoDB connection and service layer are robust.
 - Verifying API route functionality and Celery worker operations.
-
-**Frontend:**
-
-- Initial project setup with Next.js and Tailwind CSS.
-- Definition of a global color palette.
-- Development of `NavBar` component.
-- Development of reusable `Button` component.
-- Added active link styling to `NavBar` component.
-- Development of `Banner` component for the home page.
-- Development of `KeyFeatures` component for the home page, including decorative background shape.
-- Development of `WhyChoose` component for the home page.
-- Development of `Faq` component for the home page (accordion style, with animation, background, and react-icons).
-- Development of `CallToActionBanner` component for the home page.
-- Development of `Footer` component.
-- **Books Page**:
-  - Created `frontend/src/app/books/page.jsx` for the main books page.
-  - Created `frontend/src/components/books/BookSearch.jsx` for the search functionality.
-  - Created `frontend/src/components/books/BookList.jsx` to display a list of books.
-  - Created `frontend/src/components/books/BookCard.jsx` to display individual book information.
 
 ## Recent Changes
 
-**Frontend:**
+**Backend:**
+
+- **Auth Route Update (User Data Response)**:
+  - Modified `server/routes/auth_routes.py`:
+    - `/register` and `/login` routes now return a curated `user` object (id, email, created_at) instead of the raw MongoDB document, enhancing security.
+- **Auth Route Update (Register - JWT)**:
+  - Modified `server/routes/auth_routes.py`:
+    - `/register` route now generates and returns a JWT token, user's email, and user_id upon successful registration.
+- **Auth Route Refinement (Register & Login - Previous)**:
+  - Modified `server/routes/auth_routes.py`:
+    - `/register` route:
+      - Removed `username` from input.
+      - Added `confirm_password` field and validation.
+      - `username` is no longer stored in the user document on registration.
+    - `/login` route:
+      - JWT payload now includes `email` instead of `username`.
+      - Login response now includes `email`.
+- **Authentication Overhaul (Production Ready - Initial)**:
+  - Added `PyJWT` to `server/requirements.txt`.
+  - Added `SECRET_KEY` to `server/config/settings.py` (to be set in `.env`).
+  - Modified `server/routes/auth_routes.py`:
+    - Implemented password hashing with `werkzeug.security`.
+    - Implemented JWT generation and token-based login.
+    - Added `created_at` field for user registration.
+- **MongoDB Integration**:
+  - Added `pymongo` to `server/requirements.txt`.
+  - Added `MONGO_URL` to `server/config/settings.py`.
+  - Created `server/services/mongo_service.py`.
+  - Initialized `MongoService` in `server/app.py`.
+
+**Frontend (No new changes in this update, summarizing previous state):**
 
 - **Books Page Implementation**:
-  - Created the main page file `frontend/src/app/books/page.jsx`.
-  - Implemented `frontend/src/components/books/BookSearch.jsx` with a search input and icon button.
-  - Implemented `frontend/src/components/books/BookList.jsx` to display a grid of book cards (using placeholder data).
-  - Implemented `frontend/src/components/books/BookCard.jsx` to render individual book thumbnails and titles.
-  - Verified that the "Books" navigation link in `NavBar.jsx` correctly points to `/books`.
-- **Responsiveness**: The Home page and Chatbot page, along with their respective components, have been made fully responsive across various screen sizes.
-- **Chatbot Message Input Update**:
-  - Modified `frontend/src/components/chatbot/MessageInput.jsx` to match the provided image:
-    - Removed existing buttons from the left.
-    - Styled the input field container with a white background, rounded-full, and shadow.
-    - Changed placeholder text to "Ask anything...".
-    - Added two icon buttons on the right: a microphone icon (`FiMic`) for voice input and a send icon (`FiSend`).
-- **Chatbot Session History Update**:
-  - Modified `frontend/src/components/chatbot/SessionHistoryPanel.jsx`:
-    - Moved the "New Chat" button to the top of the panel.
-    - Added the project logo (`public/logo.png`) linked to the homepage (`/`) above the "New Chat" button.
-    - Added a plus icon to the "New Chat" button.
-- **Chatbot Session History (Initial Implementation)**: Added a session history panel to the left side of the chatbot interface.
-  - Created `frontend/src/components/chatbot/SessionHistoryPanel.jsx` to display "Today", "Yesterday", and "Previous History" sections with placeholder chat sessions.
-  - Modified `frontend/src/components/chatbot/ChatInterface.jsx` to a two-column layout, integrating the `SessionHistoryPanel` on the left and the main chat area on the right.
-- **Layout Refactor**: Enhanced `frontend/src/components/layout/PageShell.jsx` (client component) to handle conditional rendering of both `NavBar` and `Footer`. This allows `frontend/src/app/layout.js` to remain a Server Component and delegates layout variations. Specifically, `NavBar` and `Footer` are now hidden on the `/chatbot` route.
-- **Chatbot Page Update**: Adjusted `frontend/src/components/chatbot/ChatInterface.jsx` to `h-screen` for full-page height, reflecting the removal of NavBar and Footer on this page.
-- **ChatInterface Refactor**: Split `frontend/src/components/chatbot/ChatInterface.jsx` into smaller, more manageable components: `ChatHeader.jsx`, `MessageList.jsx`, `MessageItem.jsx`, and `MessageInput.jsx`. The core state and logic remain in `ChatInterface.jsx`.
-- **Chatbot Page**: Created `frontend/src/app/chatbot/page.jsx` and `frontend/src/components/chatbot/ChatInterface.jsx` to implement a standard chatbot UI.
-- **Register Page**: Created `frontend/src/app/register/page.jsx` and `frontend/src/components/auth/RegisterForm.jsx` to implement a standard registration interface.
-- **Login Page**: Created `frontend/src/app/login/page.jsx` and `frontend/src/components/auth/LoginForm.jsx` to implement a standard login interface.
-- **Footer Component**: Created `frontend/src/components/common/Footer.jsx` with logo, description, useful links, features, social media links, and copyright.
-- **Layout Update**: Added `Footer` component to `frontend/src/app/layout.js` to display on all pages. Added flex styling to ensure footer sticks to the bottom.
-- **CallToActionBanner Component**: Created `frontend/src/components/home/CallToActionBanner.jsx` with the specified content, styling, and mascot image.
-- **Home Page Update**: Added `CallToActionBanner` component to `frontend/src/app/page.jsx` after the `Faq` component.
-- **Faq Component Update**: Updated `frontend/src/components/home/Faq.jsx` to use `react-icons` for the chevron, added animation for expand/collapse, and a background color.
-- **Faq Component**: Created `frontend/src/components/home/Faq.jsx` with the provided FAQ content.
-- **Home Page Update**: Added `Faq` component to `frontend/src/app/page.jsx` after the `WhyChoose` component.
-- **WhyChoose Component**: Created `frontend/src/components/home/WhyChoose.jsx` with a two-column layout, mascot image, and feature list for the "Why choose TextuLearn?" section.
-- **Home Page Update**: Added `WhyChoose` component to `frontend/src/app/page.jsx` after the `KeyFeatures` component.
-- **KeyFeatures Styling**: Added a decorative background shape to the bottom-left of the `KeyFeatures` component.
-- **KeyFeatures Component**: Created `frontend/src/components/home/KeyFeatures.jsx` with the four agreed-upon features.
-- **Home Page Update**: Added `KeyFeatures` component to `frontend/src/app/page.jsx` after the `Banner`.
-- **Banner Component**: Created `frontend/src/components/home/Banner.jsx` with specified text, image, and button.
-- **Home Page Update**: Added `Banner` component to `frontend/src/app/page.jsx`.
-- **NavBar Active Link**: Updated `frontend/src/components/common/NavBar.jsx` to highlight the active navigation link using `usePathname` hook and `text-primary` color.
-- **Button Component**: Created `frontend/src/components/libs/Button.jsx` with "contain" and "outline" variants.
-- **NavBar Update**: Updated `frontend/src/components/common/NavBar.jsx` to use the new `Button` component for Login and Register buttons.
-- **NavBar Component**: Created `frontend/src/components/common/NavBar.jsx` with logo, menu items (Home, Chatbot, Books), and Login/Register buttons.
-- **Layout Update**: Integrated `NavBar` into `frontend/src/app/layout.js` to display on all pages.
-- **Initialization**: The `frontend/` directory was initialized as a Next.js project.
-- **Styling**: Tailwind CSS was integrated.
-- **Color Palette**: A color palette was defined in `frontend/src/app/globals.css`:
-  ```css
-  @theme inline {
-    --color-primary: #1dc9b4;
-    --color-primary-dark: #1a1a1a;
-    --color-secondary: #e6faf8;
-    --color-divider: #b0bec5;
-    --color-secondary-text: #b0bec5;
-    --color-highligh-blue: #80d8ff;
-  }
-  ```
-
-**Backend (No new changes in this update, summarizing previous state):**
-
-- **Route Modularization**:
-  - `server/routes/train_routes.py`: Houses the `/api/train/` POST endpoint.
-  - `server/app.py`: Registers `train_bp` and `main_bp`.
-- `server/services/queue/tasks.py`:
-  - `process_single_chunk_task` uses `EmbeddingService` and `VectorStoreService`.
-- **Python Packaging for Celery**: `__init__.py` files in `services` and `services/queue`.
-- **Service Implementation**:
-  - `EmbeddingService` implemented.
-  - `VectorStoreService` fixed by the user.
-- `memory-bank/techContext.md`: Updated to include Next.js and Tailwind CSS.
-- `memory-bank/projectbrief.md`: Updated to reflect frontend development commencement.
-- `memory-bank/systemPatterns.md`: Updated architecture diagram and component relationships to include frontend.
+  - Created `frontend/src/app/books/page.jsx`.
+  - Implemented `frontend/src/components/books/BookSearch.jsx`.
+  - Implemented `frontend/src/components/books/BookList.jsx`.
+  - Implemented `frontend/src/components/books/BookCard.jsx`.
+- **Responsiveness**: Home page and Chatbot page components are fully responsive.
+- **Chatbot UI Updates**: Message input and session history panel designs updated.
+- **Layout Refactor**: `PageShell.jsx` handles conditional rendering of `NavBar` and `Footer`.
+- **Componentization**: `ChatInterface.jsx` broken into smaller components.
+- **Pages Created**: Chatbot, Register, Login pages.
+- **Core Components**: Footer, CallToActionBanner, Faq, WhyChoose, KeyFeatures, Banner, Button, NavBar.
+- **Project Setup**: Next.js, Tailwind CSS, global color palette.
 
 ## Next Steps
 
-**Frontend:**
-
-- Develop basic page structure and layout components.
-- Implement UI elements for interacting with the backend (e.g., file upload, chat interface).
-
 **Backend:**
 
+- **Username Handling (Optional)**: Decide if `username` should be an optional field that users can set/update post-registration. If so, implement an endpoint for this.
+- **Protected Routes**: Implement a decorator or middleware to protect routes that require authentication using the JWT.
+- **User Profile Management**: Consider API endpoints for users to view/update their profiles.
 - **Celery Worker Verification**: Continue to monitor and ensure Celery workers process tasks correctly.
-- **Configuration**: Double-check API keys and configurations in `server/config/settings.py` and `.env`.
-- **Testing**:
-  - Thoroughly test the `/api/train/` endpoint.
-  - Verify Celery task processing.
-- **Documentation**: Continue updating memory bank files.
+- **Testing**: Thoroughly test all API endpoints, especially authentication and data processing.
+
+**Frontend:**
+
+- **Update Auth Forms & Logic**: Adapt registration and login logic to handle the curated `user` object and the token returned.
+- **Integrate Auth**: Connect login/register forms to the updated backend auth endpoints.
+- **Token Management**: Store and use JWT on the frontend for authenticated requests.
+- **Protected Routes (Frontend)**: Implement route guards based on authentication status.
+- Continue UI development for core features.
 
 ## Active Decisions and Considerations
 
-- **Error Handling**: Refine error handling within `process_single_chunk_task` for embedding and Pinecone operations. Decide on retry strategies for transient errors.
-- **Service Initialization**: Determine the best way to initialize and access `EmbeddingService` and `VectorStoreService` within Celery tasks (e.g., global instances, initialized per task, or passed as arguments if feasible).
-- **Batching for Pinecone**: While tasks are per-chunk, consider if `VectorStoreService` should internally batch upserts to Pinecone for efficiency if many tasks run concurrently. (Current task `process_single_chunk_task` prepares a single vector for upsert).
-- **Security**: Ensure API keys and sensitive data are handled securely.
-- **Scalability**: Keep in mind the potential for a large number of chunks and tasks.
+- **Username Strategy**: How will usernames be handled if they are needed later (e.g., for display purposes, unique identifiers beyond email)?
+- **JWT Expiration and Refresh Tokens**: Current JWT expires in 24 hours. For a more robust system, consider implementing refresh tokens.
+- **Error Handling**: Continue refining error handling across all services and routes.
+- **Input Validation**: Ensure comprehensive input validation for all API endpoints.
+- **Security**: Regularly review security practices, especially around authentication and data handling.
