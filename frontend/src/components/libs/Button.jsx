@@ -13,9 +13,13 @@ const Button = ({
   const variantStyles = {
     contain: "bg-primary text-white hover:bg-primary-dark",
     outline: "text-primary border border-primary hover:bg-gray-100",
+    danger:
+      "bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600", // Added danger variant
   };
 
-  const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${className}`;
+  const combinedClassName = `${baseStyles} ${
+    variantStyles[variant] || variantStyles.contain
+  } ${className}`;
 
   if (href) {
     return (

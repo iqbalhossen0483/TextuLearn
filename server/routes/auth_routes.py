@@ -96,6 +96,7 @@ def login():
 
     user_response_data = {
         "id": str(user['_id']),
+        "name": user["name"],
         "email": user['email'],
         "created_at": user.get("created_at").isoformat() if user.get("created_at") else None 
     }

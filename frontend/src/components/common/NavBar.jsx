@@ -4,14 +4,17 @@ import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaUserGraduate } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
+import AccountPopover from "./AccountPopover"; // Import AccountPopover
 import MobileSidePanel from "./MobileSidePanel";
 
 const NavBar = () => {
   const [sticky, setSticky] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAccountPopoverOpen, setIsAccountPopoverOpen] = useState(false); // State for popover
+  const popoverRef = useRef(null); // Ref for popover
   const { user } = useAuth();
   const pathname = usePathname();
   const menuItems = [
@@ -36,8 +39,23 @@ const NavBar = () => {
     };
   }, []);
 
+  // Close popover when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+        setIsAccountPopoverOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [popoverRef]);
+
   const openMobileMenu = () => setIsMobileMenuOpen(true);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const toggleAccountPopover = () => setIsAccountPopoverOpen((prev) => !prev);
+  const closeAccountPopover = () => setIsAccountPopoverOpen(false);
 
   return (
     <>
@@ -81,21 +99,28 @@ const NavBar = () => {
           <div className='hidden md:flex items-center space-x-3'>
             {user ? (
               // User is logged in
-              <div className='flex items-center space-x-2'>
-                {user.profile ? (
-                  <Image
-                    src={user.profile}
-                    alt='User Profile'
-                    width={40}
-                    height={40}
-                    className='rounded-full h-10 w-10 object-cover'
-                  />
-                ) : (
-                  <button>
+              <div className='relative' ref={popoverRef}>
+                {" "}
+                {/* Added relative positioning and ref */}
+                <button
+                  onClick={toggleAccountPopover}
+                  className='flex items-center focus:outline-none'
+                >
+                  {user.profileImage ? ( // Corrected to user.profileImage as per previous logic
+                    <Image
+                      src={user.profileImage}
+                      alt='User Profile'
+                      width={40}
+                      height={40}
+                      className='rounded-full h-10 w-10 object-cover'
+                    />
+                  ) : (
                     <FaUserGraduate className='text-primary text-3xl border border-primary rounded-full p-1' />
-                  </button>
+                  )}
+                </button>
+                {isAccountPopoverOpen && (
+                  <AccountPopover user={user} onClose={closeAccountPopover} />
                 )}
-                {/* You might want to add a dropdown menu here for user actions like logout, profile, etc. */}
               </div>
             ) : (
               // User is not logged in
