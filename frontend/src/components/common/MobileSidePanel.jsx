@@ -1,11 +1,14 @@
+import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaUserGraduate } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import Button from "../libs/Button";
 
 const MobileSidePanel = ({ isOpen, onClose }) => {
   const pathname = usePathname();
+  const { user } = useAuth();
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Books", path: "/books" },
@@ -69,19 +72,46 @@ const MobileSidePanel = ({ isOpen, onClose }) => {
           ))}
         </nav>
 
-        {/* Auth Links using Button component */}
+        {/* Auth Links or User Info */}
         <div className='border-t border-divider p-4 space-y-2'>
-          {authLinks.map((link) => (
-            <Button
-              key={link.name}
-              href={link.path}
-              variant={link.variant}
-              onClick={onClose}
-              className='w-full'
-            >
-              {link.name}
-            </Button>
-          ))}
+          {user ? (
+            // User is logged in
+            <div className='flex flex-col items-center space-y-1'>
+              {user.profileImage ? (
+                <Image
+                  src={user.profileImage}
+                  alt='User Profile'
+                  width={64} // Larger size for mobile panel
+                  height={64}
+                  className='rounded-full h-16 w-16 object-cover'
+                />
+              ) : (
+                <FaUserGraduate className='text-primary text-5xl border border-primary p-1 rounded-full' />
+              )}
+              {user.name && (
+                <p className='text-lg font-semibold text-gray-800'>
+                  {user.name}
+                </p>
+              )}
+              {user.email && (
+                <p className='text-sm text-gray-600'>{user.email}</p>
+              )}
+              {/* You might want to add a logout button here */}
+            </div>
+          ) : (
+            // User is not logged in
+            authLinks.map((link) => (
+              <Button
+                key={link.name}
+                href={link.path}
+                variant={link.variant}
+                onClick={onClose}
+                className='w-full'
+              >
+                {link.name}
+              </Button>
+            ))
+          )}
         </div>
       </div>
     </div>

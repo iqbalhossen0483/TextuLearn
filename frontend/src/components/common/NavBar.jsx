@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaUserGraduate } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
-import MobileSidePanel from "./MobileSidePanel"; // Import the new component
+import MobileSidePanel from "./MobileSidePanel";
 
 const NavBar = () => {
   const [sticky, setSticky] = useState(false);
@@ -76,14 +77,37 @@ const NavBar = () => {
             ))}
           </div>
 
-          {/* Login/Register Buttons */}
+          {/* Login/Register Buttons or User Profile */}
           <div className='hidden md:flex items-center space-x-3'>
-            <Button href='/login' variant='outline'>
-              Login
-            </Button>
-            <Button href='/register' variant='contain'>
-              Register
-            </Button>
+            {user ? (
+              // User is logged in
+              <div className='flex items-center space-x-2'>
+                {user.profile ? (
+                  <Image
+                    src={user.profile}
+                    alt='User Profile'
+                    width={40}
+                    height={40}
+                    className='rounded-full h-10 w-10 object-cover'
+                  />
+                ) : (
+                  <button>
+                    <FaUserGraduate className='text-primary text-3xl border border-primary rounded-full p-1' />
+                  </button>
+                )}
+                {/* You might want to add a dropdown menu here for user actions like logout, profile, etc. */}
+              </div>
+            ) : (
+              // User is not logged in
+              <>
+                <Button href='/login' variant='outline'>
+                  Login
+                </Button>
+                <Button href='/register' variant='contain'>
+                  Register
+                </Button>
+              </>
+            )}
           </div>
           {/* Mobile Menu Button */}
           <div className='md:hidden'>
