@@ -92,7 +92,7 @@ const Faq = () => {
           <p className='mt-2 text-lg text-gray-600'>
             Find answers to common questions about TextuLearn.
           </p>
-          <p className='text-outline text-6xl md:text-8xl lg:text-9xl font-bold text-center absolute left-1/2 -translate-x-1/2 z-0 select-none -top-10 opacity-30 pointer-events-none'>
+          <p className='text-outline text-6xl md:text-8xl lg:text-9xl font-bold text-center absolute left-1/2 -translate-x-1/2 z-0 select-none -top-3 md:-top-10 opacity-30 pointer-events-none'>
             FAQ
           </p>
         </div>

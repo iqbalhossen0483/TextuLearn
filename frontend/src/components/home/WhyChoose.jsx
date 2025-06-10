@@ -48,7 +48,7 @@ const WhyChoose = () => {
             <h2 className='text-3xl md:text-4xl font-bold text-primary-dark mb-4'>
               Why choose TextuLearn?
             </h2>
-            <p className='text-outline text-6xl md:text-8xl lg:text-9xl font-bold text-center absolute -left-10 z-0 select-none -top-14 opacity-30 pointer-events-none'>
+            <p className='text-outline text-6xl md:text-8xl lg:text-9xl font-bold text-center absolute left-0 md:-left-10 z-0 select-none -top-3 md:top-0 lg:-top-14 opacity-30 pointer-events-none'>
               CHOOSE
             </p>
             <p className='text-gray-700 text-base md:text-lg leading-relaxed mb-7'>

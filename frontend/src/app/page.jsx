@@ -12,6 +12,7 @@ export default function Home() {
       <WhyChoose />
       <Faq />
       <CallToActionBanner />
+      <div className='mb-8'></div>
     </main>
   );
 }

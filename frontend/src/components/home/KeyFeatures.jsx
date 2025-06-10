@@ -60,7 +60,7 @@ const KeyFeatures = () => {
         <h2 className='text-3xl md:text-4xl font-bold text-center text-primary-dark mb-4 z-20 relative'>
           Our key features
         </h2>
-        <p className='text-outline text-6xl md:text-8xl lg:text-9xl font-bold text-center absolute left-1/2 -translate-x-1/2 z-0 select-none top-8 opacity-30 pointer-events-none'>
+        <p className='text-outline text-6xl md:text-8xl lg:text-9xl font-bold text-center absolute left-1/2 -translate-x-1/2 z-0 select-none -top-3 md:-top-4 lg:top-8 opacity-30 pointer-events-none'>
           FEATURES
         </p>
         <div className='grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-x-8 gap-y-12 md:gap-y-16 relative z-10 mt-10 md:mt-18'>
