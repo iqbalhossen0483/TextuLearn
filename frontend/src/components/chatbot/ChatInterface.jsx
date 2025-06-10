@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineMenu } from "react-icons/md";
+import { useAuth } from "../../context/AuthContext";
 import MessageInput from "./MessageInput";
 import MessageList from "./MessageList";
 import SessionHistoryPanel from "./SessionHistoryPanel";
@@ -10,7 +11,9 @@ const ChatInterface = () => {
   const [showSideBar, setShowSideBar] = useState(true);
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const { user } = useAuth();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -19,24 +22,113 @@ const ChatInterface = () => {
   useEffect(scrollToBottom, [messages]);
 
   const handleSendMessage = async () => {
-    if (inputValue.trim() === "") return;
+    if (inputValue.trim() === "" || isLoading) return;
 
-    const newUserMessage = {
-      text: inputValue,
-      sender: "user",
-    };
-    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+    setIsLoading(true);
+    const questionText = inputValue;
     setInputValue("");
 
-    // Simulate bot response
-    // TODO: Replace with actual API call to the backend chatbot service
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const botResponse = {
-      id: messages.length + 2,
-      text: `Echo: ${newUserMessage.text}`, // Simple echo bot for now
-      sender: "bot",
+    const newUserMessage = {
+      id: crypto.randomUUID(),
+      text: questionText,
+      sender: "user",
+      timestamp: new Date().toISOString(),
     };
-    setMessages((prevMessages) => [...prevMessages, botResponse]);
+    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+
+    const botMessageId = crypto.randomUUID();
+    const initialBotMessage = {
+      id: botMessageId,
+      text: "",
+      sender: "bot",
+      timestamp: new Date().toISOString(),
+    };
+    setMessages((prevMessages) => [...prevMessages, initialBotMessage]);
+
+    const userId = user?.id;
+    if (!userId) {
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.id === botMessageId
+            ? { ...msg, text: "Error: User not authenticated.", isError: true }
+            : msg
+        )
+      );
+      setIsLoading(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("question", questionText);
+    formData.append("user_id", userId);
+    formData.append("session_id", crypto.randomUUID());
+
+    try {
+      // Moved fetch logic directly into the component
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+      const token = localStorage.getItem("authToken");
+
+      const response = await fetch(`${apiBaseUrl}/agent/chatbot`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        let errorDetail = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorDetail = errorData.detail || errorData.message || errorDetail;
+        } catch (e) {
+          errorDetail = response.statusText || errorDetail;
+        }
+        throw new Error(errorDetail);
+      }
+
+      if (!response.body) {
+        throw new Error("Response body is null or undefined.");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let accumulatedText = "";
+
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        if (value) {
+          const chunk = decoder.decode(value, { stream: !done });
+          if (chunk && chunk.trim()) {
+            accumulatedText += chunk.replace("data: ", "");
+            setMessages((prevMessages) =>
+              prevMessages.map((msg) =>
+                msg.id === botMessageId
+                  ? { ...msg, text: accumulatedText }
+                  : msg
+              )
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Failed to send message or process stream:", error);
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.id === botMessageId
+            ? {
+                ...msg,
+                text: `Error: ${error.message || "Failed to connect"}`,
+                isError: true,
+              }
+            : msg
+        )
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -68,6 +160,7 @@ const ChatInterface = () => {
           inputValue={inputValue}
           onInputChange={(e) => setInputValue(e.target.value)}
           onSendMessage={handleSendMessage}
+          isLoading={isLoading}
         />
       </div>
     </div>

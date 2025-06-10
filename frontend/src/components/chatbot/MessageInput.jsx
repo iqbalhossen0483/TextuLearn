@@ -7,6 +7,7 @@ const MessageInput = ({
   onInputChange,
   onSendMessage,
   extended,
+  isLoading,
 }) => {
   const handleVoiceInput = () => {
     // Placeholder for voice input functionality
@@ -23,9 +24,14 @@ const MessageInput = ({
         type='text'
         value={inputValue}
         onChange={onInputChange}
-        onKeyUp={(e) => e.key === "Enter" && onSendMessage()}
+        onKeyUp={(e) => {
+          if (e.key === "Enter" && !isLoading) {
+            onSendMessage();
+          }
+        }}
         placeholder='Explore knowledge effortlessly...'
         className='grow p-3 bg-transparent focus:outline-none'
+        disabled={isLoading}
       />
       <div className='flex items-center'>
         <button
@@ -37,7 +43,7 @@ const MessageInput = ({
         </button>
         <button
           onClick={onSendMessage}
-          disabled={!inputValue.trim()}
+          disabled={!inputValue.trim() || isLoading}
           className='p-2  hover:bg-primary-dark rounded-full transition-colors duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed'
           aria-label='Send message'
         >
