@@ -25,6 +25,21 @@
 
 **Frontend:**
 
+- **Chatbot Message Input (Updated)**:
+  - Reworked `frontend/src/components/chatbot/MessageInput.jsx` to feature a new design:
+    - Input field styled with a white background, full rounding, and shadow.
+    - Placeholder text changed to "Ask anything...".
+    - Removed previous send button.
+    - Added two new icon buttons on the right: a microphone icon for voice input and a send icon.
+- **Chatbot Session History Panel (Updated)**:
+  - Modified `frontend/src/components/chatbot/SessionHistoryPanel.jsx` to include the project logo linked to the homepage and moved the "New Chat" button (with an added icon) to the top of the panel.
+- **Chatbot Session History Panel (Initial Implementation)**:
+  - Created `frontend/src/components/chatbot/SessionHistoryPanel.jsx` with placeholder history sections ("Today", "Yesterday", "Previous History").
+  - Integrated `SessionHistoryPanel` into `frontend/src/components/chatbot/ChatInterface.jsx`, creating a two-column layout for the chatbot page.
+- **Layout Refactor**: Enhanced `frontend/src/components/layout/PageShell.jsx` (client component) to manage conditional rendering of both `NavBar` and `Footer`, ensuring `frontend/src/app/layout.js` remains a Server Component. `NavBar` and `Footer` are now hidden on the `/chatbot` route.
+- **Chatbot Page Update**: `frontend/src/components/chatbot/ChatInterface.jsx` height adjusted to `h-screen` for full-page display, corresponding to the removal of NavBar and Footer on this specific page.
+- **ChatInterface Refactor**: `frontend/src/components/chatbot/ChatInterface.jsx` was refactored into smaller sub-components: `ChatHeader.jsx`, `MessageList.jsx`, `MessageItem.jsx`, and `MessageInput.jsx` for better modularity.
+- **Chatbot Page**: Created `frontend/src/app/chatbot/page.jsx` and `frontend/src/components/chatbot/ChatInterface.jsx` for user interaction with the AI.
 - **Project Initialization**: `frontend/` directory initialized with Next.js.
 - **Styling Setup**: Tailwind CSS integrated into the Next.js project.
 - **Global Styles**: Color palette defined in `frontend/src/app/globals.css`:
@@ -56,6 +71,8 @@
 - **Home Page Update**: Integrated `CallToActionBanner` component into `frontend/src/app/page.jsx` after `Faq`.
 - **Footer Component**: Created `frontend/src/components/common/Footer.jsx`.
 - **Layout Update**: Integrated `Footer` component into `frontend/src/app/layout.js` and added flex styling for sticky footer.
+- **Register Page**: Created `frontend/src/app/register/page.jsx` and `frontend/src/components/auth/RegisterForm.jsx` for user registration.
+- **Login Page**: Created `frontend/src/app/login/page.jsx` and `frontend/src/components/auth/LoginForm.jsx` for user authentication.
 
 **Memory Bank:**
 

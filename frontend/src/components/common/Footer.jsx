@@ -32,7 +32,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className='py-4 lg:py-8 bg-secondary mt-8'>
+    <footer className='py-4 lg:py-8 bg-secondary'>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-8'>
           {/* Logo and Description */}

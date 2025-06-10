@@ -27,6 +27,26 @@ The primary focus has shifted to include frontend development alongside ongoing 
 
 **Frontend:**
 
+- **Chatbot Message Input Update**:
+  - Modified `frontend/src/components/chatbot/MessageInput.jsx` to match the provided image:
+    - Removed existing buttons from the left.
+    - Styled the input field container with a white background, rounded-full, and shadow.
+    - Changed placeholder text to "Ask anything...".
+    - Added two icon buttons on the right: a microphone icon (`FiMic`) for voice input and a send icon (`FiSend`).
+- **Chatbot Session History Update**:
+  - Modified `frontend/src/components/chatbot/SessionHistoryPanel.jsx`:
+    - Moved the "New Chat" button to the top of the panel.
+    - Added the project logo (`public/logo.png`) linked to the homepage (`/`) above the "New Chat" button.
+    - Added a plus icon to the "New Chat" button.
+- **Chatbot Session History (Initial Implementation)**: Added a session history panel to the left side of the chatbot interface.
+  - Created `frontend/src/components/chatbot/SessionHistoryPanel.jsx` to display "Today", "Yesterday", and "Previous History" sections with placeholder chat sessions.
+  - Modified `frontend/src/components/chatbot/ChatInterface.jsx` to a two-column layout, integrating the `SessionHistoryPanel` on the left and the main chat area on the right.
+- **Layout Refactor**: Enhanced `frontend/src/components/layout/PageShell.jsx` (client component) to handle conditional rendering of both `NavBar` and `Footer`. This allows `frontend/src/app/layout.js` to remain a Server Component and delegates layout variations. Specifically, `NavBar` and `Footer` are now hidden on the `/chatbot` route.
+- **Chatbot Page Update**: Adjusted `frontend/src/components/chatbot/ChatInterface.jsx` to `h-screen` for full-page height, reflecting the removal of NavBar and Footer on this page.
+- **ChatInterface Refactor**: Split `frontend/src/components/chatbot/ChatInterface.jsx` into smaller, more manageable components: `ChatHeader.jsx`, `MessageList.jsx`, `MessageItem.jsx`, and `MessageInput.jsx`. The core state and logic remain in `ChatInterface.jsx`.
+- **Chatbot Page**: Created `frontend/src/app/chatbot/page.jsx` and `frontend/src/components/chatbot/ChatInterface.jsx` to implement a standard chatbot UI.
+- **Register Page**: Created `frontend/src/app/register/page.jsx` and `frontend/src/components/auth/RegisterForm.jsx` to implement a standard registration interface.
+- **Login Page**: Created `frontend/src/app/login/page.jsx` and `frontend/src/components/auth/LoginForm.jsx` to implement a standard login interface.
 - **Footer Component**: Created `frontend/src/components/common/Footer.jsx` with logo, description, useful links, features, social media links, and copyright.
 - **Layout Update**: Added `Footer` component to `frontend/src/app/layout.js` to display on all pages. Added flex styling to ensure footer sticks to the bottom.
 - **CallToActionBanner Component**: Created `frontend/src/components/home/CallToActionBanner.jsx` with the specified content, styling, and mascot image.
