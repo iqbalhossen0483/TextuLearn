@@ -1,5 +1,6 @@
 "use client";
 
+import { checkLoginStatus } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -7,42 +8,49 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("authToken");
-    const storedUser = localStorage.getItem("authUser");
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const verifyUserSession = async () => {
+      const storedToken = localStorage.getItem("authToken");
+      if (storedToken) {
+        try {
+          const data = await checkLoginStatus();
+          if (data && data.user) {
+            setUser(data.user);
+          } else {
+            logout();
+          }
+        } catch (error) {
+          console.error("Failed to verify user session:", error);
+          logout();
+        }
+      }
+      setLoading(false);
+    };
+
+    verifyUserSession();
   }, []);
 
   const login = (userData, authToken) => {
     setUser(userData);
-    setToken(authToken);
-    localStorage.setItem("authUser", JSON.stringify(userData));
     localStorage.setItem("authToken", authToken);
   };
 
   const logout = () => {
     setUser(null);
-    setToken(null);
-    localStorage.removeItem("authUser");
     localStorage.removeItem("authToken");
     router.push("/login");
   };
 
   const isAuthenticated = () => {
-    return !!token;
+    return !!user;
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, isAuthenticated, loading }}
+      value={{ user, login, logout, isAuthenticated, loading }}
     >
       {children}
     </AuthContext.Provider>

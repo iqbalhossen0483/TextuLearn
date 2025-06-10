@@ -101,3 +101,50 @@ def login():
     }
 
     return jsonify({"message": "Login successful", "token": token, "user": user_response_data}), 200
+
+@auth_bp.route('/check_login', methods=['GET'])
+def check_login():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({"message": "Authorization header is missing or invalid"}), 401
+
+    token = auth_header.split(' ')[1]
+    secret_key = current_app.config.get('SECRET_KEY')
+
+    if not secret_key:
+        current_app.logger.error("CRITICAL: SECRET_KEY is not configured in the application for /check_login.")
+        return jsonify({"message": "Internal server error: JWT secret not configured."}), 500
+
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=["HS256"])
+        user_id = payload.get('user_id')
+        
+        if not user_id:
+            return jsonify({"message": "Invalid token: user_id missing"}), 401
+
+        mongo_service = current_app.mongo_service
+        users_collection = mongo_service.get_collection('users')
+        user_email = payload.get('email')
+        if not user_email:
+            return jsonify({"message": "Invalid token: email missing"}), 401
+
+        user = users_collection.find_one({"email": user_email})
+
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        user_response_data = {
+            "id": str(user['_id']),
+            "name": user.get("name"), 
+            "email": user['email'],
+            "created_at": user.get("created_at").isoformat() if user.get("created_at") else None
+        }
+        return jsonify({"message": "User is logged in", "user": user_response_data}), 200
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({"message": "Token has expired"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"message": "Invalid token"}), 401
+    except Exception as e:
+        current_app.logger.error(f"Error during /check_login: {e}")
+        return jsonify({"message": "An error occurred while checking login status"}), 500
