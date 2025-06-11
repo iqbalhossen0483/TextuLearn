@@ -43,7 +43,7 @@ const MessageInput = ({
         </button>
         <button
           onClick={onSendMessage}
-          disabled={!inputValue.trim() || isLoading}
+          disabled={!inputValue.trim() || !isLoading}
           className='p-2  hover:bg-primary-dark rounded-full transition-colors duration-150 disabled:bg-gray-300 disabled:cursor-not-allowed'
           aria-label='Send message'
         >

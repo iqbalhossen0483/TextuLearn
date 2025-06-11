@@ -5,22 +5,30 @@ import { FiUser } from "react-icons/fi";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-const MessageItem = ({ message }) => {
-  const { text, sender } = message;
+const MessageItem = ({ message, isLoading }) => {
+  const { text, sender, id } = message;
   const isUser = sender === "user";
 
   return (
     <div
-      className={`flex items-start space-x-3 ${
+      className={`flex items-start space-x-2 ${
         isUser ? "justify-end" : "justify-start"
       }`}
     >
-      {!isUser && <Image height={30} width={30} src='/favicon.png' alt='' />}
+      {!isUser && (
+        <Image
+          className={isLoading === id ? "animate-pulse" : ""}
+          height={30}
+          width={30}
+          src='/favicon.png'
+          alt=''
+        />
+      )}
       <div
-        className={`p-3 rounded-lg w-fit max-w-[90%] shadow ${
+        className={`w-fit max-w-[90%] ${
           isUser
-            ? "bg-primary text-white rounded-br-none"
-            : "bg-white text-gray-800 rounded-bl-none"
+            ? "bg-primary text-white rounded-br-none shadow p-3 rounded-lg"
+            : ""
         }`}
       >
         <ReactMarkdown

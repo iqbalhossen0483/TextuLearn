@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { CiRedo } from "react-icons/ci";
 import { MdOutlineMenu } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
 import MessageInput from "./MessageInput";
@@ -9,9 +10,11 @@ import SessionHistoryPanel from "./SessionHistoryPanel";
 
 const ChatInterface = () => {
   const [showSideBar, setShowSideBar] = useState(true);
+  const [isLoading, setIsLoading] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [sessionId, setSessionId] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const messagesEndRef = useRef(null);
   const { user } = useAuth();
 
@@ -21,50 +24,42 @@ const ChatInterface = () => {
 
   useEffect(scrollToBottom, [messages]);
 
-  const handleSendMessage = async () => {
-    if (inputValue.trim() === "" || isLoading) return;
+  const handleSendMessage = async (input, save = true) => {
+    if ((inputValue.trim() === "" && !input) || isLoading) return;
+    const botMessageId = crypto.randomUUID();
+    setIsLoading(botMessageId);
 
-    setIsLoading(true);
-    const questionText = inputValue;
+    const questionText = inputValue || input;
     setInputValue("");
 
-    const newUserMessage = {
-      id: crypto.randomUUID(),
-      text: questionText,
-      sender: "user",
-      timestamp: new Date().toISOString(),
-    };
-    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+    if (save) {
+      const newUserMessage = {
+        id: crypto.randomUUID(),
+        text: questionText,
+        sender: "user",
+      };
+      setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+    }
 
-    const botMessageId = crypto.randomUUID();
     const initialBotMessage = {
       id: botMessageId,
       text: "",
-      sender: "bot",
-      timestamp: new Date().toISOString(),
+      sender: "assistant",
     };
     setMessages((prevMessages) => [...prevMessages, initialBotMessage]);
 
     const userId = user?.id;
     if (!userId) {
-      setMessages((prevMessages) =>
-        prevMessages.map((msg) =>
-          msg.id === botMessageId
-            ? { ...msg, text: "Error: User not authenticated.", isError: true }
-            : msg
-        )
-      );
-      setIsLoading(false);
-      return;
+      throw { message: "Error: User not authenticated" };
     }
 
     const formData = new FormData();
     formData.append("question", questionText);
     formData.append("user_id", userId);
-    formData.append("session_id", crypto.randomUUID());
+    formData.append("session_id", sessionId);
+    formData.append("save", save);
 
     try {
-      // Moved fetch logic directly into the component
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
       const token = localStorage.getItem("authToken");
 
@@ -77,18 +72,16 @@ const ChatInterface = () => {
       });
 
       if (!response.ok) {
-        let errorDetail = `HTTP error! status: ${response.status}`;
+        let errorData = "";
         try {
-          const errorData = await response.json();
-          errorDetail = errorData.detail || errorData.message || errorDetail;
-        } catch (e) {
-          errorDetail = response.statusText || errorDetail;
-        }
-        throw new Error(errorDetail);
+          res = await response.json();
+          errorData = res.message;
+        } catch (e) {}
+        throw { message: errorData || "Something was wrong, Try again" };
       }
 
       if (!response.body) {
-        throw new Error("Response body is null or undefined.");
+        throw { message: "Response body is null or undefined." };
       }
 
       const reader = response.body.getReader();
@@ -102,32 +95,34 @@ const ChatInterface = () => {
         if (value) {
           const chunk = decoder.decode(value, { stream: !done });
           if (chunk && chunk.trim()) {
-            accumulatedText += chunk.replace("data: ", "");
-            setMessages((prevMessages) =>
-              prevMessages.map((msg) =>
-                msg.id === botMessageId
-                  ? { ...msg, text: accumulatedText }
-                  : msg
-              )
-            );
+            if (chunk.startsWith("error: ")) {
+              setError(chunk.trim());
+            } else if (chunk.startsWith("json:")) {
+              const data = chunk.replace("json:", "").trim();
+              try {
+                const jsonData = JSON.parse(data);
+                setSessionId(jsonData?.session_id);
+              } catch (error) {
+                console.log(error);
+              }
+            } else {
+              accumulatedText += chunk.replace("data: ", "");
+              setMessages((prevMessages) =>
+                prevMessages.map((msg) =>
+                  msg.id === botMessageId
+                    ? { ...msg, text: accumulatedText }
+                    : msg
+                )
+              );
+            }
           }
         }
       }
     } catch (error) {
-      console.error("Failed to send message or process stream:", error);
-      setMessages((prevMessages) =>
-        prevMessages.map((msg) =>
-          msg.id === botMessageId
-            ? {
-                ...msg,
-                text: `Error: ${error.message || "Failed to connect"}`,
-                isError: true,
-              }
-            : msg
-        )
-      );
+      console.log("Failed to send message or process stream:", error);
+      setError(error.message || "Something was wrong, Try again");
     } finally {
-      setIsLoading(false);
+      setIsLoading("");
     }
   };
 
@@ -143,18 +138,30 @@ const ChatInterface = () => {
       )}
       <SessionHistoryPanel open={showSideBar} setOpen={setShowSideBar} />
       <div
-        className={`flex flex-col px-6 z-10 py-1 grow container mx-auto h-full overflow-auto relative ${
+        className={`flex flex-col px-6 z-10 py-2 grow container mx-auto h-full overflow-auto relative ${
           !messages.length ? "justify-center items-center" : ""
         }`}
       >
         {messages.length ? (
-          <MessageList messages={messages} messagesEndRef={messagesEndRef} />
+          <MessageList
+            messages={messages}
+            isLoading={isLoading}
+            messagesEndRef={messagesEndRef}
+          />
         ) : (
           <p className='text-2xl font-medium text-primary mb-4'>
             Let's talk to learn
           </p>
         )}
 
+        {error && (
+          <button
+            onClick={() => handleSendMessage("retry", false)}
+            className='text-red-600 font-medium flex items-center gap-1'
+          >
+            <span>{error}</span> <CiRedo className='text-xl font-medium' />
+          </button>
+        )}
         <MessageInput
           extended={!messages.length}
           inputValue={inputValue}
