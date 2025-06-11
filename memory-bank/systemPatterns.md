@@ -66,7 +66,8 @@ graph TD
 - **Next.js Frontend <--> Flask API**: The Next.js frontend communicates exclusively with the Flask API endpoints for all backend operations.
 - **Flask API <--> Services/Agents**: Flask routes delegate requests to appropriate functions within the `server/services/` layer or directly to agent runners (e.g., in `server/agents/runners/`).
 - **Services <--> Pinecone**: The `vector_store.py` service interacts directly with Pinecone for storing and retrieving vector embeddings.
-- **Services <--> AI Agents**: The `retriever.py` service fetches relevant context, which is then passed to the AI agents for processing.
-- **AI Agents <--> LLM**: AI agents utilize the Google Gemini Pro LLM (via LangChain) to generate responses based on retrieved context and user queries.
+- **Services <--> AI Agents**: The `retriever.py` service (if used by an agent) fetches relevant context, which is then passed to the AI agents for processing.
+- **AI Agent Runners <--> MongoDB**: Agent runners (e.g., `chatbot_agent.py`) can interact directly with MongoDB (via `mongo_service`) for tasks like managing session history.
+- **AI Agents <--> LLM**: AI agents utilize the Google Gemini Pro LLM (via LangChain or directly through ADK) to generate responses based on retrieved context and user queries.
 - **Flask API <--> Celery**: Flask endpoints can dispatch tasks to Celery for asynchronous processing.
 - **Celery <--> Redis**: Celery uses Redis as its message broker to queue tasks and as a backend to store task results.

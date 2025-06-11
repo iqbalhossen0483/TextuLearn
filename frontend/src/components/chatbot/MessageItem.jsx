@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 const MessageItem = ({ message, isLoading }) => {
   const { text, sender, id } = message;
   const isUser = sender === "user";
+  console.log(text);
 
   return (
     <div
@@ -40,7 +41,9 @@ const MessageItem = ({ message, isLoading }) => {
             h2: ({ node, ...props }) => (
               <h2 className='text-lg font-semibold my-1' {...props} />
             ),
-            p: ({ node, ...props }) => <p className='mb-1' {...props} />,
+            p: ({ node, ...props }) => (
+              <p className='mb-1 text-lg' {...props} />
+            ),
             a: ({ node, ...props }) => (
               <a
                 className='text-blue-500 hover:underline'
@@ -55,7 +58,9 @@ const MessageItem = ({ message, isLoading }) => {
             ol: ({ node, ...props }) => (
               <ol className='list-decimal list-inside ml-5 mb-2' {...props} />
             ),
-            li: ({ node, ...props }) => <li className='mb-0.5' {...props} />,
+            li: ({ node, ...props }) => (
+              <li className='mb-0.5 list-inside' {...props} />
+            ),
             table: ({ node, ...props }) => (
               <table
                 className='table-auto w-full border-collapse border border-gray-300 my-2'
@@ -70,29 +75,6 @@ const MessageItem = ({ message, isLoading }) => {
             ),
             td: ({ node, ...props }) => (
               <td className='border border-gray-300 px-2 py-1' {...props} />
-            ),
-            code: ({ node, inline, className, children, ...props }) => {
-              const match = /language-(\w+)/.exec(className || "");
-              return !inline && match ? (
-                <pre className='bg-gray-800 text-white p-3 rounded-md overflow-x-auto my-2 text-xs'>
-                  <code className={`language-${match[1]}`} {...props}>
-                    {children}
-                  </code>
-                </pre>
-              ) : (
-                <code
-                  className='bg-gray-200 text-red-600 px-1 py-0.5 rounded text-xs'
-                  {...props}
-                >
-                  {children}
-                </code>
-              );
-            },
-            blockquote: ({ node, ...props }) => (
-              <blockquote
-                className='border-l-4 border-gray-400 pl-4 italic my-2 text-gray-600'
-                {...props}
-              />
             ),
           }}
         >

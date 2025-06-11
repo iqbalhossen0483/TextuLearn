@@ -25,41 +25,41 @@ const ChatInterface = () => {
   useEffect(scrollToBottom, [messages]);
 
   const handleSendMessage = async (input, save = true) => {
-    if ((inputValue.trim() === "" && !input) || isLoading) return;
-    const botMessageId = crypto.randomUUID();
-    setIsLoading(botMessageId);
-
-    const questionText = inputValue || input;
-    setInputValue("");
-
-    if (save) {
-      const newUserMessage = {
-        id: crypto.randomUUID(),
-        text: questionText,
-        sender: "user",
-      };
-      setMessages((prevMessages) => [...prevMessages, newUserMessage]);
-    }
-
-    const initialBotMessage = {
-      id: botMessageId,
-      text: "",
-      sender: "assistant",
-    };
-    setMessages((prevMessages) => [...prevMessages, initialBotMessage]);
-
-    const userId = user?.id;
-    if (!userId) {
-      throw { message: "Error: User not authenticated" };
-    }
-
-    const formData = new FormData();
-    formData.append("question", questionText);
-    formData.append("user_id", userId);
-    formData.append("session_id", sessionId);
-    formData.append("save", save);
-
     try {
+      if ((inputValue.trim() === "" && !input) || isLoading) return;
+      const botMessageId = crypto.randomUUID();
+      setIsLoading(botMessageId);
+
+      const questionText = inputValue || input;
+      setInputValue("");
+
+      if (save) {
+        const newUserMessage = {
+          id: crypto.randomUUID(),
+          text: questionText,
+          sender: "user",
+        };
+        setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+      }
+
+      const initialBotMessage = {
+        id: botMessageId,
+        text: "",
+        sender: "assistant",
+      };
+      setMessages((prevMessages) => [...prevMessages, initialBotMessage]);
+
+      const userId = user?.id;
+      if (!userId) {
+        throw { message: "Error: User not authenticated" };
+      }
+
+      const formData = new FormData();
+      formData.append("question", questionText);
+      formData.append("user_id", userId);
+      formData.append("session_id", sessionId);
+      formData.append("save", save);
+
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
       const token = localStorage.getItem("authToken");
 

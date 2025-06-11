@@ -4,10 +4,13 @@
 
 **Backend:**
 
-- **Chatbot Agent Route**:
-  - `server/routes/agents.py` created with a `/chatbot` endpoint.
-  - Handles POST requests with `question`, `user_id`, `session_id`, and optional `files`.
-  - Streams responses using `stream_with_context` and `chatbot_agent_response`.
+- **Chatbot Agent Logic & Route (`server/agents/runners/chatbot_agent.py` & `server/routes/agents.py`)**:
+  - The `chatbot_agent_response` function in `chatbot_agent.py` is fully implemented:
+    - Manages ADK agent interactions.
+    - Integrates with MongoDB for session creation and message history (user & assistant).
+    - Handles file uploads.
+    - Streams responses (session ID, data, errors) asynchronously.
+  - The `/chatbot` endpoint in `agents.py` correctly uses this logic for streaming chat.
 - **Production-Level Authentication (Security Enhanced)**:
   - `server/routes/auth_routes.py` updated:
     - `/register` and `/login` routes now return a curated `user` object (id, email, created_at) in the response, excluding sensitive data like hashed passwords.
@@ -33,8 +36,12 @@
   - Modified `frontend/src/components/chatbot/MessageItem.jsx` to use `ReactMarkdown` with `remarkGfm` plugin.
   - Added custom renderers via the `components` prop in `ReactMarkdown` to apply specific Tailwind CSS styles to various HTML tags (e.g., `h1`, `p`, `a`, `table`, `code`, `blockquote`), providing fine-grained control over the appearance of Markdown content.
 - **Chatbot API Integration (using Fetch for streaming)**:
-  - `frontend/src/services/chatService.js` updated: `sendChatMessageStream` now uses `fetch` for calling `/api/agent/chatbot` to better handle browser streaming.
-  - `frontend/src/components/chatbot/ChatInterface.jsx` updated: Adapted to consume the `fetch` stream (using `response.body.getReader()` and `TextDecoder`) from the updated service.
+  - `frontend/src/services/chatService.js` updated: `sendChatMessageStream` now uses `fetch` for calling `/api/agent/chatbot` to better handle browser streaming (Note: `ChatInterface.jsx` directly uses `fetch` now, this service might be deprecated or used as a fallback).
+  - `frontend/src/components/chatbot/ChatInterface.jsx` updated:
+    - Directly uses `fetch` to call the `/agent/chatbot` endpoint.
+    - Sends `question`, `user_id`, `session_id`, and `save` flag via `FormData`.
+    - Handles streamed responses (JSON for session ID, data for messages, error for issues).
+    - Manages `isLoading` state and provides a retry option on error.
   - `frontend/src/components/chatbot/MessageInput.jsx` remains updated to use `isLoading` prop to disable controls.
 - **Mobile Navigation Refined**:
   - `frontend/src/components/common/MobileSidePanel.jsx` refactored:
@@ -53,7 +60,8 @@
 
 **Memory Bank:**
 
-- `activeContext.md` and `progress.md` updated to reflect the addition of custom styling options for Markdown elements in `MessageItem.jsx`.
+- `activeContext.md` and `progress.md` updated to reflect the detailed implementation of the backend chatbot agent logic (`chatbot_agent.py`) and the corresponding frontend integration in `ChatInterface.jsx`.
+- (Previous) `activeContext.md` and `progress.md` updated to reflect the addition of custom styling options for Markdown elements in `MessageItem.jsx`.
 - (Previous) `activeContext.md` and `progress.md` updated to reflect the integration of `react-markdown` and `remark-gfm` in `MessageItem.jsx`.
 - (Previous) `activeContext.md` and `progress.md` updated to reflect the frontend integration of the `/api/agent/chatbot` streaming API using `fetch`.
 - (Previous) `activeContext.md` and `progress.md` updated to reflect the new `/chatbot` agent route.

@@ -36,15 +36,17 @@ def chatbot_agent_response(user_input, user_id, session_id=None, files=None, sav
             # Get DB collection
             mongo_service = current_app.mongo_service
             session_history = mongo_service.get_collection('sessions')
+            session_title = "New chat"
 
             if not session:
                 # Save to DB
                 payload = {
                     "user_id": ObjectId(USER_ID),
+                    "title": session_title,
                     "conversations": [{
                         "text": user_input,
                         "sender": "user",
-                        "files": []  # You can store filenames here if needed
+                        "files": []
                     }],
                     "created_at": datetime.now(timezone.utc)
                 }
@@ -63,6 +65,9 @@ def chatbot_agent_response(user_input, user_id, session_id=None, files=None, sav
                 q.put(f"json: {json.dumps({'session_id': SESSION_ID})}\n\n")
             else:
                 print(f"Already have this session exist")
+                # get session data from database
+                session_history_data = session_history.find_one({"_id": ObjectId(SESSION_ID)})
+                session_title = session_history_data["title"]
                 if save :
                     session_history.update_one(
                         {"_id": ObjectId(SESSION_ID)},
@@ -83,8 +88,15 @@ def chatbot_agent_response(user_input, user_id, session_id=None, files=None, sav
                 session_service=sessions,
             )
 
+            # payload for Agent
+            agent_payload = {
+                "user_query": user_input,
+                "session_id": SESSION_ID,
+                "session_current_title": session_title
+            }
+
             # Create content with possible files
-            parts = [types.Part(text=user_input)]
+            parts = [types.Part(text=json.dumps(agent_payload))]
             if files:
                 for f in files:
                     file_bytes = f.read()
@@ -106,6 +118,7 @@ def chatbot_agent_response(user_input, user_id, session_id=None, files=None, sav
                     if text:
                         q.put(f"data: {text}\n\n")
                         agent_response += text + " "
+                    
 
             # Save assistant response to MongoDB
             session_history.update_one(
